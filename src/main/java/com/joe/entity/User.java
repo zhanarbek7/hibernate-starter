@@ -6,7 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
+import org.hibernate.annotations.Type;
 
 
 @Data
@@ -17,14 +17,12 @@ import lombok.NoArgsConstructor;
 @Table(name = "users", schema = "public")
 public class User {
 
-    @Id
-    private String username;
-    private String firstname;
-    private String lastname;
+    @EmbeddedId
+    @AttributeOverride(name = "birthDate", column = @Column(name = "birth_date"))
+    private PersonalInfo personalInfo;
 
-    @Convert(converter = BirthdayConverter.class)
-    @Column(name = "birth_date")
-    private Birthday birthDate;
+    @Column(unique = true)
+    private String username;
 
     @Enumerated(EnumType.STRING)
     private Role role;
